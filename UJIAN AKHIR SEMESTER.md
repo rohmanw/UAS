@@ -355,10 +355,10 @@ ________________________________________________________________________________
     ```markdown
     ---
     - name: restart mysql
-          become: yes
-          become_user: root
-          become_method: su
-          action: service name=mysql state=restarted
+      become: yes
+      become_user: root
+      become_method: su
+      action: service name=mysql state=restarted
     ```
     
     
