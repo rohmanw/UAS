@@ -27,24 +27,23 @@ ________________________________________________________________________________
     - Creating lxc container, start and entering container
 
     ```markdown
-    lxc-create -n LXC_DB_SERVER -t download -- --dist debian --release bionic --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n LXC_DB_SERVER -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
     lxc-start -n LXC_DB_SERVER
-    lxc-attach -n lxc_mariadb
     apt update; apt upgrade -y; apt install -y nano
     ```
-
     
-
+    
+    
     - Install ssh server
-
+    
     ```markdown
     apt install openssh-server
     ```
-
     
-
+    
+    
     - Adding configuration at /etc/ssh/sshd_config
-
+    
     ```markdown
     nano /etc/ssh/sshd_config
     
@@ -52,61 +51,61 @@ ________________________________________________________________________________
     PermitRootLogin yes
     RSAAuthentication yes
     ```
-
     
-
+    
+    
     - Restart ssh server
-
+    
     ```markdown
     service sshd restart
     ```
-
     
-
+    
+    
     - Setting password for LXC_DB_SERVER SSH
-
+    
     ```markdown
     passwd (ex: 1)
     ```
-
     
-
+    
+    
     - Log out from LXC_DB_SERVER
-
+    
     ```markdown
     exit
     ```
-
     
-
+    
+    
     - Enrolling LXC_DB_SERVER domain and ip to Ubuntu Server Host (/etc/hosts)
-
+    
     ```markdown
     sudo nano /etc/hosts
     ```
-
     
-
+    
+    
     - Entering directory
-
+    
     ```markdown
     cd ~/ansible/tubes
     ```
-
     
-
+    
+    
     - Creating hosts and adding script
-
+    
     ```markdown
     [database]
     LXC_DB_SERVER ansible_host=lxc_mariadb.dev ansible_ssh_user=root ansible_become_pass=1
     
     ```
-
     
-
+    
+    
     - Creating install-mariadb.yml file and adding configuration
-
+    
     ```markdown
     hosts: database
     vars:
@@ -115,23 +114,23 @@ ________________________________________________________________________________
     roles:
        { role: db }
     ```
-
     
-
+    
+    
     - Creating directory roles/db, and creating tasks, handlers, templates in db directory
-
+    
     ```markdown
     mkdir -p roles/db
     mkdir -p roles/db/handlers 
     mkdir -p roles/db/tasks
     mkdir -p roles/db/templates
     ```
-
     
-
+    
+    
     - Creating main.yml in roles/db/tasks and adding script configuration
       - nano roles/db/tasksmain.yml
-
+    
     ```markdown
     ---
     - name: delete apt chache
@@ -150,66 +149,66 @@ ________________________________________________________________________________
            - python-mysqldb
            - python-pymysql
     
-        - name: Stop MySQL
+    - name: Stop MySQL
           service: name=mysqld state=stopped
-          
-        - name: set environment variables
+    
+    - name: set environment variables
           shell: systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
-          
-        - name: Start MySQL
+    
+    - name: Start MySQL
           service: name=mysqld state=started
-          
-        - name: sql query
+    
+    - name: sql query
           command:  mysql -u root --execute="UPDATE mysql.user SET authentication_string = PASSWORD('{{ password }}') WHERE User = 'root' AND Host = 'localhost';"
           
-        - name: sql query flush
+    - name: sql query flush
           command:  mysql -u root --execute="FLUSH PRIVILEGES"
           
-        - name: Stop MySQL
+    - name: Stop MySQL
           service: name=mysqld state=stopped
           
-        - name: unset environment variables
+    - name: unset environment variables
           shell: systemctl unset-environment MYSQLD_OPTS
           
-        - name: Start MySQL
+    - name: Start MySQL
           service: name=mysqld state=started
           
-        - name: Create user for mysql
+    - name: Create user for mysql
           command:  mysql -u root --execute="CREATE USER IF NOT EXISTS '{{ username }}'@'localhost' IDENTIFIED BY '{{ password }}';"
     
-        - name: GRANT ALL PRIVILEGES to user {{username}}
+    - name: GRANT ALL PRIVILEGES to user {{username}}
           command:  mysql -u root --execute="GRANT ALL PRIVILEGES ON * . * TO '{{ username }}'@'localhost';"
     
-        - name: Create user for remote mysql
+    - name: Create user for remote mysql
           command:  mysql -u root --execute="CREATE USER IF NOT EXISTS '{{ username }}'@'%' IDENTIFIED BY '{{ password }}';"
     
-        - name: GRANT ALL PRIVILEGES to remote user {{username}}
+    - name: GRANT ALL PRIVILEGES to remote user {{username}}
           command:  mysql -u root --execute="GRANT ALL PRIVILEGES ON * . * TO '{{ username }}'@'%';"
           
-        - name: sql query flush
+    - name: sql query flush
           command:  mysql -u root --execute="FLUSH PRIVILEGES"
           
-        - name: Create DB Landing
+    - name: Create DB Landing
           command:  mysql -u root --execute="CREATE DATABASE IF NOT EXISTS `landing`;"
     
-        - name: Create DB blog
+    - name: Create DB blog
           command:  mysql -u root --execute="CREATE DATABASE IF NOT EXISTS `blog`;"
     
-        - name: Create DB app
+    - name: Create DB app
           command:  mysql -u root --execute="CREATE DATABASE IF NOT EXISTS `app`;"
     
-        - name: Copy .my.cnf file with root password credentials
+    - name: Copy .my.cnf file with root password credentials
           template: 
             src=templates/my.cnf 
             dest=/etc/mysql/mariadb.conf.d/50-server.cnf
           notify: restart mysql
     ```
-
     
-
+    
+    
     - Creating my.cnf in roles/db/templates and adding script configuration
       - nano roles/db/templates/my.cnf
-
+    
     ```markdown
     #
         # These groups are read by MariaDB server.
@@ -347,12 +346,12 @@ ________________________________________________________________________________
         [mariadb-10.1]
     
     ```
-
     
-
+    
+    
     - Creating main.yml in roles/db/handlers and adding script configuration
       - roles roles/db/handlers/main.yml
-
+    
     ```markdown
     ---
         - name: restart mysql
@@ -361,31 +360,31 @@ ________________________________________________________________________________
           become_method: su
           action: service name=mysql state=restarted
     ```
-
     
-
+    
+    
     - Running command
-
+    
     ```markdown
     ansible-playbook -i hosts install-mariadb.yml -k
     ```
-
     
-
+    
+    
     - Checking, if mariadb has installed in LXC_DB_SERVER
-
+    
     ```markdown
     ssh root@LXC_DB_SERVER.dev
     mysql -u admin -p
     show databases; 
     ```
-
     
-
     
-
+    
+    
+    
     - 
-
+    
     ```markdown
     
     ```
