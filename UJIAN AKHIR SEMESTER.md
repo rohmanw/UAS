@@ -109,10 +109,10 @@ ________________________________________________________________________________
     ```markdown
     hosts: database
     vars:
-       username: 'admin'
-       password: '12345'
+      username: 'admin'
+      password: '12345'
     roles:
-       { role: db }
+      { role: db }
     ```
     
     
@@ -129,7 +129,7 @@ ________________________________________________________________________________
     
     
     - Creating main.yml in roles/db/tasks and adding script configuration
-      - nano roles/db/tasksmain.yml
+      - nano roles/db/tasks/main.yml
     
     ```markdown
     ---
@@ -381,11 +381,242 @@ ________________________________________________________________________________
     
     
     
-    
-    
-    - 
-    
-    ```markdown
-    
-    ```
+
+3. Creating LXC_PHP5_1 and LXC_PHP5_2
+
+   - Creating lxc container, start and entering container
+
+   ```markdown
+   lxc-create -n lxc_php5_1 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-create -n lxc_php5_2 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-start -n lxc_php5_1 
+   lxc_start -n lxc_php5_2
+   apt update; apt upgrade -y; apt install -y nano
+   ```
+
+   
+
+   - Configuration lxc_php5_1 and lxc_php5_2 like this commands below
+   - Install ssh server
+
+   ```markdown
+   apt install openssh-server
+   ```
+
+   
+
+   - Adding configuration at /etc/ssh/sshd_config
+
+   ```markdown
+   nano /etc/ssh/sshd_config
+   PermitRootLogin yes
+   RSAAuthentication yes
+   ```
+
+   
+
+   - Restart ssh server
+
+   ```markdown
+   service sshd restart
+   ```
+
+   
+
+   - Setting password for LXC_PHP5_1 and LXC_PHP5_2
+
+   ```markdown
+   passwd (ex: 1)
+   ```
+
+   
+
+   - Log out from LXC_PHP5_1 and LXC_PHP5_2
+
+   ```markdown
+   exit
+   ```
+
+   
+
+   - Enrolling LXC_PHP5_1 and LXC_PHP5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
+
+   ```markdown
+   sudo nano /etc/hosts
+   ```
+
+   
+
+   - Entering directory
+
+   ```markdown
+   cd ~/ansible/tubes
+   ```
+
+   
+
+   - Creating hosts and adding script
+
+   ```markdown
+   [database]
+   LXC_PHP5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
+   LXC_PHP5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
+   ```
+
+   
+
+   - Creating install-ci.yml file and adding configuration
+
+   ```markdown
+   hosts: php5
+   vars:
+     git_url: 'https://github.com/aldonesia/sas-ci'
+     destdir: '/var/www/html/ci'
+     domain: 
+        'lxc_php5_1.dev'
+        'lxc_php5_1.dev'
+   roles:
+        app
+   ```
+
+   
+
+   - Creating directory roles/app, and creating tasks, handlers, templates in db directory
+
+   ```markdown
+   mkdir -p roles/app
+   mkdir -p roles/app/handlers 
+   mkdir -p roles/app/tasks
+   mkdir -p roles/app/templates
+   ```
+
+   - Creating main.yml in roles/app/handlers and adding script configuration
+     - nano roles/app/handlers/main.yml
+
+   ```markdown
+   ---
+   - name: restart nginx
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=nginx state=restarted
+   
+   - name: restart php
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=php5.6-fpm state=restarted
+   ```
+
+   - Creating main.yml in roles/app/tasks and adding script configuration
+     - nano roles/app/tasks/main.yml
+
+   ```markdown
+   ---
+   - name: delete apt chache
+     become: yes
+     become_user: root
+     become_method: su
+     command: rm -vf /var/lib/apt/lists/*
+   
+   - name: install requirement dpkg to install php5
+     become: yes
+     become_user: root
+     become_method: su
+     apt: name={{ item }} state=latest update_cache=true
+     with_items:
+       - ca-certificates
+       - apt-transport-https
+       - wget
+       - curl
+       - python-apt
+       - software-properties-common
+       - git
+   
+   - name: Add key
+     apt_key:
+       url: https://packages.sury.org/php/apt.gpg
+       state: present
+   
+   - name: Add Php Repository
+     apt_repository:
+         repo: "deb https://packages.sury.org/php/ stretch main"
+         state: present
+         filename: php.list
+         update_cache: true
+   
+   - name: install nginx php5
+     become: yes
+     become_user: root
+     become_method: su
+     apt: name={{ item }} state=latest update_cache=true
+     with_items:
+       - nginx
+       - nginx-extras
+       - php5.6
+       - php5.6-fpm
+       - php5.6-common
+       - php5.6-cli
+       - php5.6-curl
+       - php5.6-mbstring
+       - php5.6-mysqlnd
+       - php5.6-xml
+   
+   - name: Git clone repo sas-ci
+     become: yes
+     git:
+       repo: '{{ git_url }}'
+       dest: "{{ destdir }}"
+   
+   - name: Copy app.conf
+     template:
+       src=templates/app.conf
+       dest=/etc/nginx/sites-available/{{ domain }}
+     vars:
+       servername: '{{ domain }}'
+   
+   - name: Delete another nginx config
+     become: yes
+     become_user: root
+     become_method: su
+     command: rm -f /etc/nginx/sites-enabled/*
+   
+   - name: Symlink app.conf
+     command: ln -sfn /etc/nginx/sites-available/{{ domain }} /etc/nginx/sites-enabled/{{ domain }}
+     notify:
+       - restart nginx
+   
+   - name: Write {{ domain }} to /etc/hosts
+     lineinfile:
+       dest: /etc/hosts
+       regexp: '.*{{ domain }}$'
+       line: "127.0.0.1 {{ domain }}"
+       state: present
+   
+   ```
+
+   - Creating main.yml in roles/app/templates and adding script configuration
+     - nano roles/app/templates/main.yml
+
+   ```markdown
+   app.conf
+   
+   server {
+     listen 80;
+     server_name {{servername}};
+     root {{ destdir }};
+     index index.php;
+     location / {
+        try_files $uri $uri/ /index.php?$query_string;
+     }
+     location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php5.6-fpm.sock;  #Sesuaikan dengan versi PHP
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME {{ destdir }}$fastcgi_script_name;
+        include fastcgi_params;
+     }
+   }
+   ```
+
+   
 
