@@ -22,13 +22,13 @@ ________________________________________________________________________________
 
 
 
- 2. Creating LXC_DB_SERVER and install mariadb
+ 2. Creating lxc_db_server and install mariadb
 
     - Creating lxc container, start and entering container
 
     ```markdown
-    lxc-create -n LXC_DB_SERVER -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-start -n LXC_DB_SERVER
+    lxc-create -n lxc_db_server -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-start -n lxc_db_server
     apt update; apt upgrade -y; apt install -y nano
     ```
     
@@ -62,7 +62,7 @@ ________________________________________________________________________________
     
     
     
-    - Setting password for LXC_DB_SERVER SSH
+    - Setting password for lxc_db_server ssh
     
     ```markdown
     passwd (ex: 1)
@@ -70,7 +70,7 @@ ________________________________________________________________________________
     
     
     
-    - Log out from LXC_DB_SERVER
+    - Log out from lxc_db_server
     
     ```markdown
     exit
@@ -78,7 +78,7 @@ ________________________________________________________________________________
     
     
     
-    - Enrolling LXC_DB_SERVER domain and ip to Ubuntu Server Host (/etc/hosts)
+    - Enrolling lxc_db_server domain and ip to Ubuntu Server Host (/etc/hosts)
     
     ```markdown
     sudo nano /etc/hosts
@@ -98,7 +98,7 @@ ________________________________________________________________________________
     
     ```markdown
     [database]
-    LXC_DB_SERVER ansible_host=lxc_mariadb.dev ansible_ssh_user=root ansible_become_pass=1
+    lxc_db_server ansible_host=lxc_mariadb.dev ansible_ssh_user=root ansible_become_pass=1
     
     ```
     
@@ -371,10 +371,10 @@ ________________________________________________________________________________
     
     
     
-    - Checking, if mariadb has installed in LXC_DB_SERVER
+    - Checking, if mariadb has installed in lxc_db_server
     
     ```markdown
-    ssh root@LXC_DB_SERVER.dev
+    ssh root@lxc_db_server.dev
     mysql -u admin -p
     show databases; 
     ```
@@ -382,7 +382,7 @@ ________________________________________________________________________________
     
     
 
-3. Creating LXC_PHP5_1 and LXC_PHP5_2
+3. Creating lxc_php5_1 and lxc_php5_2
 
    - Creating lxc container, start and entering container
 
@@ -423,7 +423,7 @@ ________________________________________________________________________________
 
    
 
-   - Setting password for LXC_PHP5_1 and LXC_PHP5_2
+   - Setting password for lxc_php5_1 and lxc_php5_2
 
    ```markdown
    passwd (ex: 1)
@@ -431,7 +431,7 @@ ________________________________________________________________________________
 
    
 
-   - Log out from LXC_PHP5_1 and LXC_PHP5_2
+   - Log out from lxc_php5_1 and lxc_php5_2
 
    ```markdown
    exit
@@ -439,7 +439,7 @@ ________________________________________________________________________________
 
    
 
-   - Enrolling LXC_PHP5_1 and LXC_PHP5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
+   - Enrolling lxc_php5_1 and lxc_php5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
 
    ```markdown
    sudo nano /etc/hosts
