@@ -459,8 +459,8 @@ ________________________________________________________________________________
 
    ```markdown
    [database]
-   LXC_PHP5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
-   LXC_PHP5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
    ```
 
    
@@ -474,7 +474,7 @@ ________________________________________________________________________________
      destdir: '/var/www/html/ci'
      domain: 
         'lxc_php5_1.dev'
-        'lxc_php5_1.dev'
+        'lxc_php5_2.dev'
    roles:
         app
    ```
@@ -595,12 +595,10 @@ ________________________________________________________________________________
    
    ```
 
-   - Creating main.yml in roles/app/templates and adding script configuration
-     - nano roles/app/templates/main.yml
+   - Creating app.conf in roles/app/templates and adding script configuration
+     - nano roles/app/templates/app.conf
 
    ```markdown
-   app.conf
-   
    server {
      listen 80;
      server_name {{servername}};
