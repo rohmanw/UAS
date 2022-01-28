@@ -408,64 +408,65 @@ ________________________________________________________________________________
 
    ```markdown
    nano /etc/ssh/sshd_config
+   
    PermitRootLogin yes
    RSAAuthentication yes
    ```
-
    
-
+   
+   
    - Restart ssh server
-
+   
    ```markdown
    service sshd restart
    ```
-
    
-
+   
+   
    - Setting password for lxc_php5_1 and lxc_php5_2
-
+   
    ```markdown
    passwd (ex: 1)
    ```
-
    
-
+   
+   
    - Log out from lxc_php5_1 and lxc_php5_2
-
+   
    ```markdown
    exit
    ```
-
    
-
+   
+   
    - Enrolling lxc_php5_1 and lxc_php5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
-
+   
    ```markdown
    sudo nano /etc/hosts
    ```
-
    
-
+   
+   
    - Entering directory
-
+   
    ```markdown
    cd ~/ansible/tubes
    ```
-
    
-
+   
+   
    - Creating hosts and adding script
-
+   
    ```markdown
    [database]
    lxc_php5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
    lxc_php5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
    ```
-
    
-
+   
+   
    - Creating install-ci.yml file and adding configuration
-
+   
    ```markdown
    hosts: php5
    vars:
@@ -477,21 +478,21 @@ ________________________________________________________________________________
    roles:
         app
    ```
-
    
-
+   
+   
    - Creating directory roles/app, and creating tasks, handlers, templates in db directory
-
+   
    ```markdown
    mkdir -p roles/app
    mkdir -p roles/app/handlers 
    mkdir -p roles/app/tasks
    mkdir -p roles/app/templates
    ```
-
+   
    - Creating main.yml in roles/app/handlers and adding script configuration
      - nano roles/app/handlers/main.yml
-
+   
    ```markdown
    ---
    - name: restart nginx
@@ -506,10 +507,10 @@ ________________________________________________________________________________
      become_method: su
      action: service name=php5.6-fpm state=restarted
    ```
-
+   
    - Creating main.yml in roles/app/tasks and adding script configuration
      - nano roles/app/tasks/main.yml
-
+   
    ```markdown
    ---
    - name: delete apt chache
@@ -593,10 +594,10 @@ ________________________________________________________________________________
        state: present
    
    ```
-
+   
    - Creating app.conf in roles/app/templates and adding script configuration
      - nano roles/app/templates/app.conf
-
+   
    ```markdown
    server {
      listen 80;
@@ -614,7 +615,7 @@ ________________________________________________________________________________
      }
    }
    ```
-
+   
 4. Creating lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, and lxc_php7_6
 
    - Creating lxc container, start and entering container
@@ -648,6 +649,7 @@ ________________________________________________________________________________
 
    ```markdown
    nano /etc/ssh/sshd_config
+   
    PermitRootLogin yes
    RSAAuthentication yes
    ```
@@ -968,6 +970,15 @@ ________________________________________________________________________________
    
    /** Sets up WordPress vars and include file */
    require_once ABSPATH . 'wp-settings.php';
+   
+   /** MySQL database username */
+   define( 'DB_USER', 'admin' );
+   
+   /** MySQL database password */
+   define( 'DB_PASSWORD', '12345' );
+   
+   /** MySQL hostname */
+   define( 'DB_HOST', '10.0.3.200:3306' );
    ```
 
    
@@ -990,6 +1001,9 @@ ________________________________________________________________________________
    
         # Your Domain Name
         server_name lxc_php7.dev;
+        
+        # Your Domain Name
+        server_name lxc_php7_4.dev;
    
         location / {
                 try_files $uri $uri/ /index.php?$query_string;
@@ -1005,6 +1019,105 @@ ________________________________________________________________________________
                 include fastcgi_params;
         }
    }
+   ```
+
+   - Creating 43.168.192.in-addr.arpa in roles/wp/templates and adding script configuration
+     - nano roles/wp/templates/43.168.192.in-addr.arpa
+
+   ```markdown
+   ;
+   ; BIND reverse data file loopback interface
+   ;
+   $TTL    604800
+   @       IN      SOA     kelompok7.fpas. root.kelompok7.fpas. (
+                                 1         ; Serial
+                            604800         ; Refresh
+                             86400         ; Retry
+                           2419200         ; Expire
+                            604800 )       ; Negative Cache TTL
+   ;
+   43.168.192.in-addr.arpa. IN NS kelompok7.fpas.
+   185 IN PTR kelompok7.fpas.
+   ```
+
+   - Creating kelompok7.fpas in roles/wp/templates and adding script configuration
+     - nano roles/wp/templates/kelompok7.fpas
+
+   ```markdown
+   ;
+   ; BIND reverse data file for loopback interface
+   ;
+   $TTL    604800
+   @       IN      SOA     kelompok7.fpas. root.kelompok7.fpas. (
+                                 1         ; Serial
+                            604800         ; Refresh
+                             86400         ; Retry
+                           2419200         ; Expire
+                            604800 )       ; Negative Cache TTL
+   ;
+   @       IN      NS      kelompok7.fpas.
+   @       IN      A      192.168.43.185 
+   news       IN      CNAME      kelompok7.fpas.
+   ```
+
+   - Creating wp.conf.local in roles/wp/templates and adding script configuration
+     - nano roles/wp/templates/wp.conf.local
+
+   ```markdown
+   //
+   // Do any local configuration here
+   //
+   
+   // Consider adding the 1918 zones here, if they are not used in your
+   // organization
+   //include "/etc/bind/zones.rfc1918";
+   
+   zone "kelompok7.fpas"{
+              type master;
+              file "/etc/bind/vm/kelompok7.fpas";
+   };
+   
+   zone "43.168.192.in-addr.arpa"{
+              type master;
+              file "/etc/bind/vm/43.168.192.in-addr.arpa";
+   };
+   ```
+
+   - Creating named.conf.options in roles/wp/templates and adding script configuration
+     - nano roles/wp/templates/named.conf.options
+
+   ```markdown
+   options {
+           directory "/var/cache/bind";
+   
+           // If there is a firewall between you and nameservers you want
+           // to talk to, you may need to fix the firewall to allow multiple
+           // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+   
+           // If your ISP provided one or more IP addresses for stable
+           // nameservers, you probably want to use them as forwarders.
+           // Uncomment the following block, and insert the addresses replacing
+           // the all-0's placeholder.
+   
+           forwarders {
+              8.8.8.8;
+           };
+   
+           //========================================================================
+           // If BIND logs error messages about the root key being expired,
+           // you will need to update your keys.  See https://www.isc.org/bind-keys
+           //========================================================================
+           //dnssec-validation auto;
+           allow-query{any;};
+           listen-on-v6 { any; };
+   };
+   ```
+
+   - Creating resolv.conf in roles/wp/templates and adding script configuration
+     - nano roles/wp/templates/resolv.conf
+
+   ```markdown
+   nameserver 192.168.43.185
    ```
 
    
