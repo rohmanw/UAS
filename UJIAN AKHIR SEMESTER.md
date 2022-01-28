@@ -722,13 +722,13 @@ ________________________________________________________________________________
 
    
 
-   - Creating directory roles/app, and creating tasks, handlers, templates in db directory
+   - Creating directory roles/wp, and creating tasks, handlers, templates in db directory
 
    ```markdown
-   mkdir -p roles/app
-   mkdir -p roles/app/handlers 
-   mkdir -p roles/app/tasks
-   mkdir -p roles/app/templates
+   mkdir -p roles/wp
+   mkdir -p roles/wp/handlers 
+   mkdir -p roles/wp/tasks
+   mkdir -p roles/wp/templates
    ```
 
    
@@ -787,6 +787,8 @@ ________________________________________________________________________________
        - php7.4-curl
        - wget
        - curl
+       - bind9
+       - dnsutils
    
    - name: wget wordpress
      shell: wget -c http://wordpress.org/latest.tar.gz
@@ -831,12 +833,43 @@ ________________________________________________________________________________
      command: phpenmod mbstring
      notify:
        - restart php
+   - name: creates directory
+     file:
+      path: /var/www/html/news/wp
+      state: directory
+   
+   - name: copy conf.local
+     template:
+       src=templates/named.conf.local
+       dest=/var/www/html/news/wp
+     notify:
+      - restart bind
+   
+   - name: copy kelompok7.fpas
+     template:
+       src=templates/kelompok7.fpas
+       dest=/var/www/html/news/wp
+     notify:
+      - restart bind
+   
+   - name: copy 43.168.192
+     template:
+       src=templates/43.168.192.in-addr.arpa
+       dest=/var/www/html/news/wp
+     notify:
+      - restart bind
+   - name: copy named.conf
+     template:
+       src=templates/named.conf.options
+       dest=/var/www/html/news/wp
+     notify:
+      - restart bind
    ```
 
    
 
    - Creating wp.conf in roles/wp/templates and adding script configuration
-     - nano roles/app/templates/wp.conf
+     - nano roles/wp/templates/wp.conf
 
    ```markdown
    <?php
@@ -940,7 +973,7 @@ ________________________________________________________________________________
    
 
    - Creating wp.local in roles/wp/templates and adding script configuration
-     - nano roles/app/templates/wp.local
+     - nano roles/wp/templates/wp.local
 
    ```markdown
    server {
