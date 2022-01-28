@@ -894,18 +894,18 @@ ________________________________________________________________________________
     * @package WordPress
     */
    
-   define('WP_HOME', 'http://vm.local/blog');
-   define('WP_SITEURL', 'http://vm.local/blog');
+   define('WP_HOME', 'http://kelompok7.fpas/news');
+   define('WP_SITEURL', 'http://kelompok7.fpas/news');
    
-   // ** MySQL settings - You can get this info from your web host ** //
+   // * MySQL settings - You can get this info from your web host * //
    /** The name of the database for WordPress */
-   define( 'DB_NAME', 'blog' );
+   define( 'DB_NAME', 'news' );
    
    /** MySQL database username */
    define( 'DB_USER', 'admin' );
    
    /** MySQL database password */
-   define( 'DB_PASSWORD', 'SysAdminSas0102' );
+   define( 'DB_PASSWORD', '12345' );
    
    /** MySQL hostname */
    define( 'DB_HOST', '10.0.3.200:3306' );
@@ -970,15 +970,6 @@ ________________________________________________________________________________
    
    /** Sets up WordPress vars and include file */
    require_once ABSPATH . 'wp-settings.php';
-   
-   /** MySQL database username */
-   define( 'DB_USER', 'admin' );
-   
-   /** MySQL database password */
-   define( 'DB_PASSWORD', '12345' );
-   
-   /** MySQL hostname */
-   define( 'DB_HOST', '10.0.3.200:3306' );
    ```
 
    
@@ -996,7 +987,7 @@ ________________________________________________________________________________
         error_log /var/log/nginx/wordpress-error.log;
    
         # Webroot Directory for WordPress
-        root /var/www/html/blog;
+        root /var/www/html/wp;
         index index.php index.html index.htm;
    
         # Your Domain Name
