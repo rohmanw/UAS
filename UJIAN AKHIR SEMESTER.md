@@ -12,15 +12,11 @@ ________________________________________________________________________________
    sudo apt install ansible sshpass
    ```
 
-   
-
    - Creating directory
 
    ```markdown
    mkdir -p ~/ansible/tubes
    ```
-
-
 
  2. Creating lxc_db_server and install mariadb
 
@@ -32,15 +28,11 @@ ________________________________________________________________________________
     apt update; apt upgrade -y; apt install -y nano
     ```
     
-    
-    
     - Install ssh server
     
     ```markdown
     apt install openssh-server
     ```
-    
-    
     
     - Adding configuration at /etc/ssh/sshd_config
     
@@ -52,15 +44,11 @@ ________________________________________________________________________________
     RSAAuthentication yes
     ```
     
-    
-    
     - Restart ssh server
     
     ```markdown
     service sshd restart
     ```
-    
-    
     
     - Setting password for lxc_db_server ssh
     
@@ -68,15 +56,11 @@ ________________________________________________________________________________
     passwd (ex: 1)
     ```
     
-    
-    
     - Log out from lxc_db_server
     
     ```markdown
     exit
     ```
-    
-    
     
     - Enrolling lxc_db_server domain and ip to Ubuntu Server Host (/etc/hosts)
     
@@ -84,15 +68,11 @@ ________________________________________________________________________________
     sudo nano /etc/hosts
     ```
     
-    
-    
     - Entering directory
     
     ```markdown
     cd ~/ansible/tubes
     ```
-    
-    
     
     - Creating hosts and adding script
     
@@ -101,8 +81,6 @@ ________________________________________________________________________________
     lxc_db_server ansible_host=lxc_mariadb.dev ansible_ssh_user=root ansible_become_pass=1
     
     ```
-    
-    
     
     - Creating install-mariadb.yml file and adding configuration
     
@@ -115,8 +93,6 @@ ________________________________________________________________________________
       { role: db }
     ```
     
-    
-    
     - Creating directory roles/db, and creating tasks, handlers, templates in db directory
     
     ```markdown
@@ -125,8 +101,6 @@ ________________________________________________________________________________
     mkdir -p roles/db/tasks
     mkdir -p roles/db/templates
     ```
-    
-    
     
     - Creating main.yml in roles/db/tasks and adding script configuration
       - nano roles/db/tasks/main.yml
@@ -347,8 +321,6 @@ ________________________________________________________________________________
     
     ```
     
-    
-    
     - Creating main.yml in roles/db/handlers and adding script configuration
       - roles roles/db/handlers/main.yml
     
@@ -361,15 +333,11 @@ ________________________________________________________________________________
       action: service name=mysql state=restarted
     ```
     
-    
-    
     - Running command
     
     ```markdown
     ansible-playbook -i hosts install-mariadb.yml -k
     ```
-    
-    
     
     - Checking, if mariadb has installed in lxc_db_server
     
@@ -393,17 +361,13 @@ ________________________________________________________________________________
    apt update; apt upgrade -y; apt install -y nano
    ```
 
-   
-
    - Configuration lxc_php5_1 and lxc_php5_2 like this commands below
    - Install ssh server
-
+   
    ```markdown
    apt install openssh-server
    ```
-
    
-
    - Adding configuration at /etc/ssh/sshd_config
 
    ```markdown
@@ -413,15 +377,11 @@ ________________________________________________________________________________
    RSAAuthentication yes
    ```
    
-   
-   
    - Restart ssh server
    
    ```markdown
    service sshd restart
    ```
-   
-   
    
    - Setting password for lxc_php5_1 and lxc_php5_2
    
@@ -429,15 +389,11 @@ ________________________________________________________________________________
    passwd (ex: 1)
    ```
    
-   
-   
    - Log out from lxc_php5_1 and lxc_php5_2
    
    ```markdown
    exit
    ```
-   
-   
    
    - Enrolling lxc_php5_1 and lxc_php5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
    
@@ -445,15 +401,11 @@ ________________________________________________________________________________
    sudo nano /etc/hosts
    ```
    
-   
-   
    - Entering directory
    
    ```markdown
    cd ~/ansible/tubes
    ```
-   
-   
    
    - Creating hosts and adding script
    
@@ -462,8 +414,6 @@ ________________________________________________________________________________
    lxc_php5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
    lxc_php5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
    ```
-   
-   
    
    - Creating install-ci.yml file and adding configuration
    
@@ -478,8 +428,6 @@ ________________________________________________________________________________
    roles:
         app
    ```
-   
-   
    
    - Creating directory roles/app, and creating tasks, handlers, templates in db directory
    
@@ -634,17 +582,13 @@ ________________________________________________________________________________
    apt update; apt upgrade -y; apt install -y nano
    ```
 
-   
-
    - Configuration lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6 like this commands below
    - Install ssh server
-
+   
    ```markdown
    apt install openssh-server
    ```
-
    
-
    - Adding configuration at /etc/ssh/sshd_config
 
    ```markdown
@@ -653,16 +597,12 @@ ________________________________________________________________________________
    PermitRootLogin yes
    RSAAuthentication yes
    ```
-
    
-
    - Restart ssh server
-
+   
    ```markdown
    service sshd restart
    ```
-
-   
 
    - Setting password for lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6
 
@@ -670,31 +610,23 @@ ________________________________________________________________________________
    passwd (ex: 1)
    ```
 
-   
-
    - Log out from lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6
 
    ```markdown
    exit
    ```
-
    
-
    - Enrolling lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6 domain and ip to Ubuntu Server Host (/etc/hosts)
 
    ```markdown
    sudo nano /etc/hosts
    ```
 
-   
-
    - Entering directory
-
+   
    ```markdown
    cd ~/ansible/tubes
    ```
-
-   
 
    - Creating hosts and adding script
 
@@ -706,11 +638,9 @@ ________________________________________________________________________________
    lxc_php7_4 ansible_host=lxc_php7_4.dev ansible_ssh_user=root ansible_become_pass=1
    lxc_php7_6 ansible_host=lxc_php7_6.dev ansible_ssh_user=root ansible_become_pass=1
    ```
-
    
-
    - Creating install-ci.yml file and adding configuration
-
+   
    ```markdown
    ---
    - hosts: ubuntu_php7
@@ -721,23 +651,19 @@ ________________________________________________________________________________
      roles:
        - wp
    ```
-
    
-
    - Creating directory roles/wp, and creating tasks, handlers, templates in db directory
-
+   
    ```markdown
    mkdir -p roles/wp
    mkdir -p roles/wp/handlers 
    mkdir -p roles/wp/tasks
    mkdir -p roles/wp/templates
    ```
-
    
-
    - Creating main.yml in roles/wp/handlers and adding script configuration
      - nano roles/wp/handlers
-
+   
    ```markdown
    ---
    - name: restart php
@@ -752,12 +678,10 @@ ________________________________________________________________________________
      become_method: su
      action: service name=nginx state=restarted
    ```
-
    
-
    - Creating main.yml in roles/wp/tasks and adding script configuration
      - nano roles/wp/tasks
-
+   
    ```markdown
    ---
    - name: delete apt chache
@@ -867,12 +791,10 @@ ________________________________________________________________________________
      notify:
       - restart bind
    ```
-
    
-
    - Creating wp.conf in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/wp.conf
-
+   
    ```markdown
    <?php
    /**
@@ -971,12 +893,10 @@ ________________________________________________________________________________
    /** Sets up WordPress vars and include file */
    require_once ABSPATH . 'wp-settings.php';
    ```
-
    
-
    - Creating wp.local in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/wp.local
-
+   
    ```markdown
    server {
         listen 80;
@@ -1008,10 +928,10 @@ ________________________________________________________________________________
         }
    }
    ```
-
+   
    - Creating 43.168.192.in-addr.arpa in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/43.168.192.in-addr.arpa
-
+   
    ```markdown
    ;
    ; BIND reverse data file loopback interface
@@ -1027,10 +947,10 @@ ________________________________________________________________________________
    43.168.192.in-addr.arpa. IN NS kelompok7.fpas.
    185 IN PTR kelompok7.fpas.
    ```
-
+   
    - Creating kelompok7.fpas in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/kelompok7.fpas
-
+   
    ```markdown
    ;
    ; BIND reverse data file for loopback interface
@@ -1047,10 +967,10 @@ ________________________________________________________________________________
    @       IN      A      192.168.43.185 
    news       IN      CNAME      kelompok7.fpas.
    ```
-
+   
    - Creating wp.conf.local in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/wp.conf.local
-
+   
    ```markdown
    //
    // Do any local configuration here
@@ -1070,10 +990,10 @@ ________________________________________________________________________________
               file "/etc/bind/vm/43.168.192.in-addr.arpa";
    };
    ```
-
+   
    - Creating named.conf.options in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/named.conf.options
-
+   
    ```markdown
    options {
            directory "/var/cache/bind";
@@ -1100,14 +1020,577 @@ ________________________________________________________________________________
            listen-on-v6 { any; };
    };
    ```
-
+   
    - Creating resolv.conf in roles/wp/templates and adding script configuration
      - nano roles/wp/templates/resolv.conf
-
+   
    ```markdown
    nameserver 192.168.43.185
    ```
-
    
-
    
+   
+   5. Creating main.yml adding script configuration
+   
+      - nano roles/lv/handlers/main.yml
+   
+      ```markdown
+      ---
+      - name: restart php
+        become: yes
+        become_user: root
+        become_method: su
+        action: service name=php7.4-fpm state=restarted
+      
+      - name: restart nginx
+        become: yes
+        become_user: root
+        become_method: su
+        action: service name=nginx state=restarted
+      ```
+
+      - nano roles/lv/tasks/main.yml
+   
+      ```markdown
+      ---
+      - name: delete apt chache
+        become: yes
+        become_user: root
+        become_method: su
+        command: rm -vf /var/lib/apt/lists/*
+      
+      - name: Download and install Composer
+        shell: curl -sS https://getcomposer.org/installer | php
+        args:
+          chdir: /usr/src/
+          creates: /usr/local/bin/composer
+          warn: false
+        become: yes
+      
+      - name: Add Composer to global path
+        copy:
+          dest: /usr/local/bin/composer
+          group: root
+          mode: '0755'
+          owner: root
+          src: /usr/src/composer.phar
+          remote_src: yes
+        become: yes
+      
+      - name: Ansible delete file create-project
+        file:
+          path: /var/www/html/landing
+          state: absent
+      
+      - name: composer create-project
+        shell: /usr/local/bin/composer create-project laravel/laravel /var/www/html/landing --prefer-dist --no-interaction
+      
+      - name: Copy .env.template
+        template:
+          src=templates/env.template
+          dest=/var/www/html/landing/.env
+      
+      - name: composer
+        shell: cd /var/www/html/landing; /usr/local/bin/composer install  --no-interaction
+      
+      - name: key
+        shell: /usr/bin/php7.4 /var/www/html/landing/artisan key:generate
+      
+      - name: chmod
+        become: yes
+        become_user: root
+        become_method: su
+        command: chmod 777 -R /var/www/html/landing/storage
+      
+      - name : www.conf
+        template:
+          src=templates/www.conf
+          dest=/etc/php/7.4/fpm/pool.d/www.conf
+      
+      - name: Copy lv.conf
+        template:
+          src=templates/lv.conf
+          dest=/etc/nginx/sites-available/{{ domain }}
+        vars:
+          servername: '{{ domain }}'
+      
+      - name: Symlink lv.conf
+        command: ln -sfn /etc/nginx/sites-available/{{ domain }} /etc/nginx/sites-enabled/{{ domain }}
+        notify:
+          - restart nginx
+      
+      - name: Write {{ domain }} to /etc/hosts
+        lineinfile:
+          dest: /etc/hosts
+          regexp: '.*{{ domain }}$'
+          line: "127.0.0.1 {{ domain }}"
+          state: present
+      ```
+   
+      -  nano roles/lv/templates/env.template
+   
+      ```markdown
+      APP_NAME=Laravel
+      APP_ENV=local
+      APP_KEY=
+      APP_DEBUG=true
+      APP_URL=http://vm.local
+      
+      LOG_CHANNEL=stack
+      LOG_DEPRECATIONS_CHANNEL=null
+      LOG_LEVEL=debug
+      
+      DB_CONNECTION=mysql
+      DB_HOST=10.0.3.200
+      DB_PORT=3306
+      DB_DATABASE=landing
+      DB_USERNAME=admin
+      DB_PASSWORD=SysAdminSas0102
+      
+      BROADCAST_DRIVER=log
+      CACHE_DRIVER=file
+      FILESYSTEM_DRIVER=local
+      QUEUE_CONNECTION=sync
+      SESSION_DRIVER=file
+      SESSION_LIFETIME=120
+      
+      MEMCACHED_HOST=127.0.0.1
+      
+      REDIS_HOST=127.0.0.1
+      REDIS_PASSWORD=null
+      REDIS_PORT=6379
+      
+      MAIL_MAILER=smtp
+      MAIL_HOST=mailhog
+      MAIL_PORT=1025
+      MAIL_USERNAME=null
+      MAIL_PASSWORD=null
+      MAIL_ENCRYPTION=null
+      MAIL_FROM_ADDRESS=null
+      MAIL_FROM_NAME="${APP_NAME}"
+      
+      AWS_ACCESS_KEY_ID=
+      AWS_SECRET_ACCESS_KEY=
+      AWS_DEFAULT_REGION=us-east-1
+      AWS_BUCKET=
+      AWS_USE_PATH_STYLE_ENDPOINT=false
+      
+      PUSHER_APP_ID=
+      PUSHER_APP_KEY=
+      PUSHER_APP_SECRET=
+      PUSHER_APP_CLUSTER=mt1
+      
+      MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+      MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+      ```
+   
+      - nano roles/lv/templates/lv.conf
+   
+      ```markdown
+      server {
+           listen 80;
+           listen [::]:80;
+      
+           # Log files for Debugging
+           access_log /var/log/nginx/vhostlaravel-access.log;
+           error_log /var/log/nginx/vhostlaravel-error.log;
+      
+           # Webroot Directory for Laravel project
+           root /var/www/html/landing/public;
+           index index.php index.html index.htm;
+      
+           # Your Domain Name
+           server_name lxc_landing.dev;
+      
+           location / {
+                   try_files $uri $uri/ /index.php?$query_string;
+           }
+      
+           # PHP-FPM Configuration Nginx
+           location ~ \.php$ {
+                   try_files $uri =404;
+                   fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                   fastcgi_pass 127.0.0.1:9001;
+                   fastcgi_index index.php;
+                   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                   include fastcgi_params;
+           }
+      }
+      ```
+   
+      - nano roles/lv/templates/www.conf
+   
+      ```markdown
+      ; Start a new pool named 'www'.
+      ; the variable $pool can be used in any directive and will be replaced by the
+      ; pool name ('www' here)
+      [www]
+      
+      ; Per pool prefix
+      ; It only applies on the following directives:
+      ; - 'access.log'
+      ; - 'slowlog'
+      ; - 'listen' (unixsocket)
+      ; - 'chroot'
+      ; - 'chdir'
+      ; - 'php_values'
+      ; - 'php_admin_values'
+      ; When not set, the global prefix (or /usr) applies instead.
+      ; Note: This directive can also be relative to the global prefix.
+      ; Default Value: none
+      prefix = /var/www
+      
+      ; Unix user/group of processes
+      ; Note: The user is mandatory. If the group is not set, the default user's group
+      ;       will be used.
+      user = www-data
+      group = www-data
+      
+      ; The address on which to accept FastCGI requests.
+      ; Valid syntaxes are:
+      ;   'ip.add.re.ss:port'    - to listen on a TCP socket to a specific IPv4 address on
+      ;                            a specific port;
+      ;   '[ip:6:addr:ess]:port' - to listen on a TCP socket to a specific IPv6 address on
+      ;                            a specific port;
+      ;   'port'                 - to listen on a TCP socket to all addresses
+      ;                            (IPv6 and IPv4-mapped) on a specific port;
+      ;   '/path/to/unix/socket' - to listen on a unix socket.
+      ; Note: This value is mandatory.
+      listen = 127.0.0.1:9001
+      
+      ; Set listen(2) backlog.
+      ; Default Value: 511 (-1 on FreeBSD and OpenBSD)
+      ;listen.backlog = 511
+      
+      ; Set permissions for unix socket, if one is used. In Linux, read/write
+      ; permissions must be set in order to allow connections from a web server. Many
+      ; BSD-derived systems allow connections regardless of permissions.
+      ; Default Values: user and group are set as the running user
+      ;                 mode is set to 0660
+      listen.owner = www-data
+      listen.group = www-data
+      ;listen.mode = 0660
+      ; When POSIX Access Control Lists are supported you can set them using
+      ; these options, value is a comma separated list of user/group names.
+      ; When set, listen.owner and listen.group are ignored
+      ;listen.acl_users =
+      ;listen.acl_groups =
+      
+      ; List of addresses (IPv4/IPv6) of FastCGI clients which are allowed to connect.
+      ; Equivalent to the FCGI_WEB_SERVER_ADDRS environment variable in the original
+      ; PHP FCGI (5.2.2+). Makes sense only with a tcp listening socket. Each address
+      ; must be separated by a comma. If this value is left blank, connections will be
+      ; accepted from any ip address.
+      ; Default Value: any
+      listen.allowed_clients = 127.0.0.1
+      
+      ; Specify the nice(2) priority to apply to the pool processes (only if set)
+      ; The value can vary from -19 (highest priority) to 20 (lower priority)
+      ; Note: - It will only work if the FPM master process is launched as root
+      ;       - The pool processes will inherit the master process priority
+      ;         unless it specified otherwise
+      ; Default Value: no set
+      ; process.priority = -19
+      
+      ; Choose how the process manager will control the number of child processes.
+      ; Possible Values:
+      ;   static  - a fixed number (pm.max_children) of child processes;
+      ;   dynamic - the number of child processes are set dynamically based on the
+      ;             following directives. With this process management, there will be
+      ;             always at least 1 children.
+      ;             pm.max_children      - the maximum number of children that can
+      ;                                    be alive at the same time.
+      ;             pm.start_servers     - the number of children created on startup.
+      ;             pm.min_spare_servers - the minimum number of children in 'idle'
+      ;                                    state (waiting to process). If the number
+      ;                                    of 'idle' processes is less than this
+      ;                                    number then some children will be created.
+      ;             pm.max_spare_servers - the maximum number of children in 'idle'
+      ;                                    state (waiting to process). If the number
+      ;                                    of 'idle' processes is greater than this
+      ;                                    number then some children will be killed.
+      ;  ondemand - no children are created at startup. Children will be forked when
+      ;             new requests will connect. The following parameter are used:
+      ;             pm.max_children           - the maximum number of children that
+      ;                                         can be alive at the same time.
+      ;             pm.process_idle_timeout   - The number of seconds after which
+      ;                                         an idle process will be killed.
+      ; Note: This value is mandatory.
+      pm = dynamic
+      
+      ; The number of child processes to be created when pm is set to 'static' and the
+      ; maximum number of child processes when pm is set to 'dynamic' or 'ondemand'.
+      ; This value sets the limit on the number of simultaneous requests that will be
+      ; served. Equivalent to the ApacheMaxClients directive with mpm_prefork.
+      ; Equivalent to the PHP_FCGI_CHILDREN environment variable in the original PHP
+      ; CGI. The below defaults are based on a server without much resources. Don't
+      ; forget to tweak pm.* to fit your needs.
+      ; Note: Used when pm is set to 'static', 'dynamic' or 'ondemand'
+      ; Note: This value is mandatory.
+      pm.max_children = 20
+      
+      ; The number of child processes created on startup.
+      ; Note: Used only when pm is set to 'dynamic'
+      ; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
+      pm.start_servers = 4
+      
+      ; The desired minimum number of idle server processes.
+      ; Note: Used only when pm is set to 'dynamic'
+      ; Note: Mandatory when pm is set to 'dynamic'
+      pm.min_spare_servers = 3
+      
+      ; The desired maximum number of idle server processes.
+      ; Note: Used only when pm is set to 'dynamic'
+      ; Note: Mandatory when pm is set to 'dynamic'
+      pm.max_spare_servers = 6
+      
+      ; The number of seconds after which an idle process will be killed.
+      ; Note: Used only when pm is set to 'ondemand'
+      ; Default Value: 10s
+      pm.process_idle_timeout = 6s;
+      
+      ; The number of requests each child process should execute before respawning.
+      ; This can be useful to work around memory leaks in 3rd party libraries. For
+      ; endless request processing specify '0'. Equivalent to PHP_FCGI_MAX_REQUESTS.
+      ; Default Value: 0
+      pm.max_requests = 1000
+      
+      ; The URI to view the FPM status page. If this value is not set, no URI will be
+      ; recognized as a status page. It shows the following informations:
+      ;   pool                 - the name of the pool;
+      ;   process manager      - static, dynamic or ondemand;
+      ;   start time           - the date and time FPM has started;
+      ;   start since          - number of seconds since FPM has started;
+      ;   accepted conn        - the number of request accepted by the pool;
+      ;   listen queue         - the number of request in the queue of pending
+      ;                          connections (see backlog in listen(2));
+      ;   max listen queue     - the maximum number of requests in the queue
+      ;                          of pending connections since FPM has started;
+      ;   listen queue len     - the size of the socket queue of pending connections;
+      ;   idle processes       - the number of idle processes;
+      ;   active processes     - the number of active processes;
+      ;   total processes      - the number of idle + active processes;
+      ;   max active processes - the maximum number of active processes since FPM
+      ;                          has started;
+      ;   max children reached - number of times, the process limit has been reached,
+      ;                          when pm tries to start more children (works only for
+      ;                          pm 'dynamic' and 'ondemand');
+      ; Value are updated in real time.
+      ; Example output:
+      ;   pool:                 www
+      ;   process manager:      static
+      ;   start time:           01/Jul/2011:17:53:49 +0200
+      ;   start since:          62636
+      ;   accepted conn:        190460
+      ;   listen queue:         0
+      ;   max listen queue:     1
+      ;   listen queue len:     42
+      ;   idle processes:       4
+      ;   active processes:     11
+      ;   total processes:      15
+      ;   max active processes: 12
+      ;   max children reached: 0
+      ;
+      ; By default the status page output is formatted as text/plain. Passing either
+      ; 'html', 'xml' or 'json' in the query string will return the corresponding
+      ; output syntax. Example:
+      ;   http://www.foo.bar/status
+      ;   http://www.foo.bar/status?json
+      ;   http://www.foo.bar/status?html
+      ;   http://www.foo.bar/status?xml
+      ;
+      ; By default the status page only outputs short status. Passing 'full' in the
+      ; query string will also return status for each pool process.
+      ; Example:
+      ;   http://www.foo.bar/status?full
+      ;   http://www.foo.bar/status?json&full
+      ;   http://www.foo.bar/status?html&full
+      ;   http://www.foo.bar/status?xml&full
+      ; The Full status returns for each process:
+      ;   pid                  - the PID of the process;
+      ;   state                - the state of the process (Idle, Running, ...);
+      ;   start time           - the date and time the process has started;
+      ;   start since          - the number of seconds since the process has started;
+      ;   requests             - the number of requests the process has served;
+      ;   request duration     - the duration in ms of the requests;
+      ;   request method       - the request method (GET, POST, ...);
+      ;   request URI          - the request URI with the query string;
+      ;   content length       - the content length of the request (only with POST);
+      ;   user                 - the user (PHP_AUTH_USER) (or '-' if not set);
+      ;   script               - the main script called (or '-' if not set);
+      ;   last request cpu     - the %cpu the last request consumed
+      ;                          it's always 0 if the process is not in Idle state
+      ;                          because CPU calculation is done when the request
+      ;                          processing has terminated;
+      ;   last request memory  - the max amount of memory the last request consumed
+      ;                          it's always 0 if the process is not in Idle state
+      ;                          because memory calculation is done when the request
+      ;                          processing has terminated;
+      ; If the process is in Idle state, then informations are related to the
+      ; last request the process has served. Otherwise informations are related to
+      ; the current request being served.
+      ; Example output:
+      ;   ************************
+      ;   pid:                  31330
+      ;   state:                Running
+      ;   start time:           01/Jul/2011:17:53:49 +0200
+      ;   start since:          63087
+      ;   requests:             12808
+      ;   request duration:     1250261
+      ;   request method:       GET
+      ;   request URI:          /test_mem.php?N=10000
+      ;   content length:       0
+      ;   user:                 -
+      ;   script:               /home/fat/web/docs/php/test_mem.php
+      ;   last request cpu:     0.00
+      ;   last request memory:  0
+      ;
+      ; Note: There is a real-time FPM status monitoring sample web page available
+      ;       It's available in: /usr/share/php/7.0/fpm/status.html
+      ;
+      ; Note: The value must start with a leading slash (/). The value can be
+      ;       anything, but it may not be a good idea to use the .php extension or it
+      ;       may conflict with a real PHP file.
+      ; Default Value: not set
+      ;pm.status_path = /status
+      
+      ; The ping URI to call the monitoring page of FPM. If this value is not set, no
+      ; URI will be recognized as a ping page. This could be used to test from outside
+      ; that FPM is alive and responding, or to
+      ; - create a graph of FPM availability (rrd or such);
+      ; - remove a server from a group if it is not responding (load balancing);
+      ; - trigger alerts for the operating team (24/7).
+      ; Note: The value must start with a leading slash (/). The value can be
+      ;       anything, but it may not be a good idea to use the .php extension or it
+      ;       may conflict with a real PHP file.
+      ; Default Value: not set
+      ;ping.path = /ping
+      
+      ; This directive may be used to customize the response of a ping request. The
+      ; response is formatted as text/plain with a 200 response code.
+      ; Default Value: pong
+      ;ping.response = pong
+      
+      ; The access log file
+      ; Default: not set
+      ;access.log = log/$pool.access.log
+      
+      ; The log file for slow requests
+      ; Default Value: not set
+      ; Note: slowlog is mandatory if request_slowlog_timeout is set
+      ;slowlog = log/$pool.log.slow
+      
+      ; The timeout for serving a single request after which a PHP backtrace will be
+      ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
+      ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
+      ; Default Value: 0
+      ;request_slowlog_timeout = 0
+      
+      ; The timeout for serving a single request after which the worker process will
+      ; be killed. This option should be used when the 'max_execution_time' ini option
+      ; does not stop script execution for some reason. A value of '0' means 'off'.
+      ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
+      ; Default Value: 0
+      ;request_terminate_timeout = 0
+      
+      ; Set open file descriptor rlimit.
+      ; Default Value: system defined value
+      ;rlimit_files = 1024
+      
+      ; Set max core size rlimit.
+      ; Possible Values: 'unlimited' or an integer greater or equal to 0
+      ; Default Value: system defined value
+      ;rlimit_core = 0
+      
+      ; Chroot to this directory at the start. This value must be defined as an
+      ; absolute path. When this value is not set, chroot is not used.
+      ; Note: you can prefix with '$prefix' to chroot to the pool prefix or one
+      ; of its subdirectories. If the pool prefix is not set, the global prefix
+      ; will be used instead.
+      ; Note: chrooting is a great security feature and should be used whenever
+      ;       possible. However, all PHP paths will be relative to the chroot
+      ;       (error_log, sessions.save_path, ...).
+      ; Default Value: not set
+      ;chroot =
+      
+      ; Chdir to this directory at the start.
+      ; Note: relative path can be used.
+      ; Default Value: current directory or / when chroot
+      ;chdir = /var/www
+      
+      ; Redirect worker stdout and stderr into main error log. If not set, stdout and
+      ; stderr will be redirected to /dev/null according to FastCGI specs.
+      ; Note: on highloaded environement, this can cause some delay in the page
+      ; process time (several ms).
+      ; Default Value: no
+      ;catch_workers_output = yes
+      
+      ; Clear environment in FPM workers
+      ; Prevents arbitrary environment variables from reaching FPM worker processes
+      ; by clearing the environment in workers before env vars specified in this
+      ; pool configuration are added.
+      ; Setting to "no" will make all environment variables available to PHP code
+      ; via getenv(), $_ENV and $_SERVER.
+      ; Default Value: yes
+      ;clear_env = no
+      
+      ; Limits the extensions of the main script FPM will allow to parse. This can
+      ; prevent configuration mistakes on the web server side. You should only limit
+      ; FPM to .php extensions to prevent malicious users to use other extensions to
+      ; exectute php code.
+      ; Note: set an empty value to allow all extensions.
+      ; Default Value: .php
+      ;security.limit_extensions = .php .php3 .php4 .php5 .php7
+      
+      ; Pass environment variables like LD_LIBRARY_PATH. All $VARIABLEs are taken from
+      ; the current environment.
+      ; Default Value: clean env
+      ;env[HOSTNAME] = $HOSTNAME
+      ;env[PATH] = /usr/local/bin:/usr/bin:/bin
+      ;env[TMP] = /tmp
+      ;env[TMPDIR] = /tmp
+      ;env[TEMP] = /tmp
+      
+      ; Additional php.ini defines, specific to this pool of workers. These settings
+      ; overwrite the values previously defined in the php.ini. The directives are the
+      ; same as the PHP SAPI:
+      ;   php_value/php_flag             - you can set classic ini defines which can
+      ;                                    be overwritten from PHP call 'ini_set'.
+      ;   php_admin_value/php_admin_flag - these directives won't be overwritten by
+      ;                                     PHP call 'ini_set'
+      ; For php_*flag, valid values are on, off, 1, 0, true, false, yes or no.
+      
+      ; Defining 'extension' will load the corresponding shared extension from
+      ; extension_dir. Defining 'disable_functions' or 'disable_classes' will not
+      ; overwrite previously defined php.ini values, but will append the new value
+      ; instead.
+      
+      ; Note: path INI options can be relative and will be expanded with the prefix
+      ; (pool, global or /usr)
+      
+      ; Default Value: nothing is defined by default except the values in php.ini and
+      ;                specified at startup with the -d argument
+      ;php_admin_value[sendmail_path] = /usr/sbin/sendmail -t -i -f www@my.domain.com
+      ;php_flag[display_errors] = off
+      ;php_admin_value[error_log] = /var/log/fpm-php.www.log
+      ;php_admin_flag[log_errors] = on
+      ;php_admin_value[memory_limit] = 32M
+      ```
+   
+      
+   
+      #### **Hasil Screenshoot**
+   
+   ![Laravel SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Laravel SS1.jpg)
+   
+   
+   
+   
+   
+   ![Codelnigter SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Codelnigter SS1.jpg)![Ansible SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Ansible SS1.jpg)
+   
+   
+   
+   
+   
+   ![YII SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\YII SS1.jpg)
