@@ -989,9 +989,6 @@ ________________________________________________________________________________
         # Webroot Directory for WordPress
         root /var/www/html/wp;
         index index.php index.html index.htm;
-   
-        # Your Domain Name
-        server_name lxc_php7.dev;
         
         # Your Domain Name
         server_name lxc_php7_4.dev;
