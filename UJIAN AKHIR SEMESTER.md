@@ -381,7 +381,6 @@ ________________________________________________________________________________
     
     
     
-
 3. Creating lxc_php5_1 and lxc_php5_2
 
    - Creating lxc container, start and entering container
@@ -616,5 +615,355 @@ ________________________________________________________________________________
    }
    ```
 
+4. Creating lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, and lxc_php7_6
+
+   - Creating lxc container, start and entering container
+
+   ```markdown
+   lxc-create -n lxc_php7_1 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-create -n lxc_php7_2 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-create -n lxc_php7_3 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-create -n lxc_php7_4 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-create -n lxc_php7_6 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+   lxc-start -n lxc_php7_1 
+   lxc_start -n lxc_php7_2
+   lxc_start -n lxc_php7_3
+   lxc_start -n lxc_php7_4
+   lxc_start -n lxc_php7_6
+   apt update; apt upgrade -y; apt install -y nano
+   ```
+
    
 
+   - Configuration lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6 like this commands below
+   - Install ssh server
+
+   ```markdown
+   apt install openssh-server
+   ```
+
+   
+
+   - Adding configuration at /etc/ssh/sshd_config
+
+   ```markdown
+   nano /etc/ssh/sshd_config
+   PermitRootLogin yes
+   RSAAuthentication yes
+   ```
+
+   
+
+   - Restart ssh server
+
+   ```markdown
+   service sshd restart
+   ```
+
+   
+
+   - Setting password for lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6
+
+   ```markdown
+   passwd (ex: 1)
+   ```
+
+   
+
+   - Log out from lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6
+
+   ```markdown
+   exit
+   ```
+
+   
+
+   - Enrolling lxc_php7_1, lxc_php7_2 , lxc_php7_3,  lxc_php7_4, and lxc_php7_6 domain and ip to Ubuntu Server Host (/etc/hosts)
+
+   ```markdown
+   sudo nano /etc/hosts
+   ```
+
+   
+
+   - Entering directory
+
+   ```markdown
+   cd ~/ansible/tubes
+   ```
+
+   
+
+   - Creating hosts and adding script
+
+   ```markdown
+   [database]
+   lxc_php7_1 ansible_host=lxc_php7_1.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php7_2 ansible_host=lxc_php7_2.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php7_3 ansible_host=lxc_php7_3.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php7_4 ansible_host=lxc_php7_4.dev ansible_ssh_user=root ansible_become_pass=1
+   lxc_php7_6 ansible_host=lxc_php7_6.dev ansible_ssh_user=root ansible_become_pass=1
+   ```
+
+   
+
+   - Creating install-ci.yml file and adding configuration
+
+   ```markdown
+   ---
+   - hosts: ubuntu_php7
+     vars:
+       username: 'admin'
+       password: 'SysAdminSas0102' #DON'T FORGET TO CHANGE
+       domain: 'lxc_php7.dev'
+     roles:
+       - wp
+   ```
+
+   
+
+   - Creating directory roles/app, and creating tasks, handlers, templates in db directory
+
+   ```markdown
+   ```
+
+   
+
+   - Creating main.yml in roles/wp/handlers and adding script configuration
+     - nano roles/wp/handlers
+
+   ```markdown
+   ---
+   - name: restart php
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=php7.4-fpm state=restarted
+   
+   - name: restart nginx
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=nginx state=restarted
+   ```
+
+   - Creating main.yml in roles/wp/tasks and adding script configuration
+     - nano roles/wp/tasks
+
+   ```markdown
+   ---
+   - name: delete apt chache
+     become: yes
+     become_user: root
+     become_method: su
+     command: rm -vf /var/lib/apt/lists/*
+   
+   - name: install php
+     become: yes
+     become_user: root
+     become_method: su
+     apt: name={{ item }} state=latest update_cache=true
+     with_items:
+       - nginx
+       - nginx-extras
+       - php7.4
+       - php7.4-fpm
+       - php7.4-curl
+       - php7.4-xml
+       - php7.4-gd
+       - php7.4-opcache
+       - php7.4-mbstring
+       - php7.4-zip
+       - php7.4-json
+       - php7.4-cli
+       - php7.4-mysqlnd
+       - php7.4-xmlrpc
+       - php7.4-curl
+       - wget
+       - curl
+   
+   - name: wget wordpress
+     shell: wget -c http://wordpress.org/latest.tar.gz
+   
+   - name: tar xvzf
+     shell: tar -xvzf latest.tar.gz
+   
+   - name: make page
+     shell: cp -R wordpress /var/www/html/blog
+   
+   - name: chmod
+     become: yes
+     become_user: root
+     become_method: su
+     command: chmod 775 -R /var/www/html/blog/
+   
+   - name: Copy .wp-config.conf
+     template:
+       src=templates/wp.conf
+       dest=/var/www/html/blog/wp-config.php
+   
+   - name: Copy wp.local
+     template:
+       src=templates/wp.local
+       dest=/etc/nginx/sites-available/{{ domain }}
+     vars:
+       servername: '{{ domain }}'
+   
+   - name: Symlink wp.local
+     command: ln -sfn /etc/nginx/sites-available/{{ domain }} /etc/nginx/sites-enabled/{{ domain }}
+     notify:
+       - restart nginx
+   
+   - name: Write {{ domain }} to /etc/hosts
+     lineinfile:
+       dest: /etc/hosts
+       regexp: '.*{{ domain }}$'
+       line: "127.0.0.1 {{ domain }}"
+       state: present
+   
+   - name: enable module php mbstring
+     command: phpenmod mbstring
+     notify:
+       - restart php
+   ```
+
+   - Creating wp.conf in roles/wp/templates and adding script configuration
+     - nano roles/app/templates/wp.conf
+
+   ```markdown
+   <?php
+   /**
+    * The base configuration for WordPress
+    *
+    * The wp-config.php creation script uses this file during the installation.
+    * You don't have to use the web site, you can copy this file to "wp-config.php"
+    * and fill in the values.
+    *
+    * This file contains the following configurations:
+    *
+    * * MySQL settings
+    * * Secret keys
+    * * Database table prefix
+    * * ABSPATH
+    *
+    * @link https://wordpress.org/support/article/editing-wp-config-php/
+    *
+    * @package WordPress
+    */
+   
+   define('WP_HOME', 'http://vm.local/blog');
+   define('WP_SITEURL', 'http://vm.local/blog');
+   
+   // ** MySQL settings - You can get this info from your web host ** //
+   /** The name of the database for WordPress */
+   define( 'DB_NAME', 'blog' );
+   
+   /** MySQL database username */
+   define( 'DB_USER', 'admin' );
+   
+   /** MySQL database password */
+   define( 'DB_PASSWORD', 'SysAdminSas0102' );
+   
+   /** MySQL hostname */
+   define( 'DB_HOST', '10.0.3.200:3306' );
+   
+   /** Database charset to use in creating database tables. */
+   define( 'DB_CHARSET', 'utf8' );
+   
+   /** The database collate type. Don't change this if in doubt. */
+   define( 'DB_COLLATE', '' );
+   
+   /**#@+
+    * Authentication unique keys and salts.
+    *
+    * Change these to different unique phrases! You can generate these using
+    * the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}.
+    *
+    * You can change these at any point in time to invalidate all existing cookies.
+    * This will force all users to have to log in again.
+    *
+    * @since 2.6.0
+    */
+   define( 'AUTH_KEY',         'put your unique phrase here' );
+   define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
+   define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
+   define( 'NONCE_KEY',        'put your unique phrase here' );
+   define( 'AUTH_SALT',        'put your unique phrase here' );
+   define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
+   define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
+   define( 'NONCE_SALT',       'put your unique phrase here' );
+   
+   /**#@-*/
+   
+   /**
+    * WordPress database table prefix.
+    *
+    * You can have multiple installations in one database if you give each
+    * a unique prefix. Only numbers, letters, and underscores please!
+    */
+   $table_prefix = 'wp_';
+   
+   /**
+    * For developers: WordPress debugging mode.
+    *
+    * Change this to true to enable the display of notices during development.
+    * It is strongly recommended that plugin and theme developers use WP_DEBUG
+    * in their development environments.
+    *
+    * For information on other constants that can be used for debugging,
+    * visit the documentation.
+    *
+    * @link https://wordpress.org/support/article/debugging-in-wordpress/
+    */
+   define( 'WP_DEBUG', false );
+   
+   /* Add any custom values between this line and the "stop editing" line. */
+   /* That's all, stop editing! happy publishing. */
+   
+   /** Absolute path to the WordPress Directory*/
+   if ( ! defined( 'ABSPATH' ) ) {
+          define( 'ABSPATH', __DIR__ . '/' );
+   }
+   
+   /** Sets up WordPress vars and include file */
+   require_once ABSPATH . 'wp-settings.php';
+   ```
+
+   - Creating wp.local in roles/wp/templates and adding script configuration
+     - nano roles/app/templates/wp.local
+
+   ```markdown
+   server {
+        listen 80;
+        listen [::]:80;
+   
+        # Log files for Debugging
+        access_log /var/log/nginx/wordpress-access.log;
+        error_log /var/log/nginx/wordpress-error.log;
+   
+        # Webroot Directory for WordPress
+        root /var/www/html/blog;
+        index index.php index.html index.htm;
+   
+        # Your Domain Name
+        server_name lxc_php7.dev;
+   
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+   
+        # PHP-FPM Configuration Nginx
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
+        }
+   }
+   ```
+
+   
+
+   
