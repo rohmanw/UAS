@@ -725,6 +725,10 @@ ________________________________________________________________________________
    - Creating directory roles/app, and creating tasks, handlers, templates in db directory
 
    ```markdown
+   mkdir -p roles/app
+   mkdir -p roles/app/handlers 
+   mkdir -p roles/app/tasks
+   mkdir -p roles/app/templates
    ```
 
    
@@ -746,6 +750,8 @@ ________________________________________________________________________________
      become_method: su
      action: service name=nginx state=restarted
    ```
+
+   
 
    - Creating main.yml in roles/wp/tasks and adding script configuration
      - nano roles/wp/tasks
@@ -826,6 +832,8 @@ ________________________________________________________________________________
      notify:
        - restart php
    ```
+
+   
 
    - Creating wp.conf in roles/wp/templates and adding script configuration
      - nano roles/app/templates/wp.conf
@@ -928,6 +936,8 @@ ________________________________________________________________________________
    /** Sets up WordPress vars and include file */
    require_once ABSPATH . 'wp-settings.php';
    ```
+
+   
 
    - Creating wp.local in roles/wp/templates and adding script configuration
      - nano roles/app/templates/wp.local
