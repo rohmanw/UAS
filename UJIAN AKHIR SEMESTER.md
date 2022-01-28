@@ -1030,7 +1030,7 @@ ________________________________________________________________________________
    
    
 
-5. Creating main.yml adding script configuration
+5. Creating main.yml, env.template, lv.conf, www.conf adding script configuration
 
    - nano roles/lv/handlers/main.yml
 
