@@ -1581,16 +1581,16 @@ ________________________________________________________________________________
    
       #### **Hasil Screenshoot**
    
-   ![Laravel SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Laravel SS1.jpg)
+   ![Laravel SS1](https://user-images.githubusercontent.com/93067781/151578224-ca92d3a2-544d-40cf-9369-5b5e381b8753.jpg)
    
    
    
    
    
-   ![Codelnigter SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Codelnigter SS1.jpg)![Ansible SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\Ansible SS1.jpg)
+   ![Codelnigter SS1](https://user-images.githubusercontent.com/93067781/151578275-839a2a4c-db49-41e6-a946-2a7c1ce28fca.jpg)![Ansible SS1](https://user-images.githubusercontent.com/93067781/151578294-ea382d28-0c93-4290-ae03-3958105d413a.jpg)
    
    
    
    
    
-   ![YII SS1](D:\IT Telkom Surabaya\Semester V\Sistem Administrasi\YII SS1.jpg)
+   ![YII SS1](https://user-images.githubusercontent.com/93067781/151578288-0856a03e-c9fa-4fd7-b3cb-f2746d75bbe4.jpg)
