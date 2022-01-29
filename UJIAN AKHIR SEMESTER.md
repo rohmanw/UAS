@@ -511,7 +511,9 @@ ________________________________________________________________________________
    }
    ```
 
-   - Creating install-ci.yml file and adding configuration
+   
+
+5. Creating install-wp.yml file and adding configuration
 
    ```markdown
    ---
@@ -902,7 +904,7 @@ ________________________________________________________________________________
 
    
 
-5. Creating instal-laravel.yml file and adding configuration
+6. Creating install-laravel.yml file and adding configuration
 
    ```markdown
    ---
