@@ -44,7 +44,34 @@ ________________________________________________________________________________
     apt update; apt upgrade -y; apt install -y nano
     ```
 
+    - Setting all of containers auto start
+
+    ```markdown
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_db_server/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php5_1r/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php5_2/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_1/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_2/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_3/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_4/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_5/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_6/config
+    ```
+
+    - Setting hosts and adding IP Address and Domain for each containers in VM ubuntu server
+
+      - nano /etc/hosts
+
+      ![4d63a659-9d10-4376-9f9d-a9e7317898c1](https://user-images.githubusercontent.com/93067781/151665341-24f23072-789e-4e04-97c5-39c8751f5230.jpg)
+
+    - Setting IP Static for all off containers until this allow picture
+
+      - If have set each containers check the IP containers in VM ubuntu server with command : lxc-ls -f
+
+      ![4bd93110-7a7b-412f-8979-0b556d747a3c](https://user-images.githubusercontent.com/93067781/151665457-a40ec96a-f6f4-4cb7-80f6-bd9570a52aff.jpg)
+
     - Configuration lxc_db_server, lxc_php5_1, lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6 like this commands below
+
     - Install ssh server
 
     ```markdown
@@ -79,7 +106,7 @@ ________________________________________________________________________________
     exit
     ```
 
-    - Enrolling lxc_db_server, lxc_php5_1, and lxc_php5_2 domain and ip to Ubuntu Server Host (/etc/hosts)
+    - Enrolling lxc_db_server ssh, lxc_php5_1, lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6 domain and ip to Ubuntu Server Host (/etc/hosts)
 
     ```markdown
     sudo nano /etc/hosts
@@ -95,13 +122,15 @@ ________________________________________________________________________________
 
     ![ba94bcf4-2e69-43e7-b14a-dbdb91ef7a87](https://user-images.githubusercontent.com/93067781/151647679-806dcaeb-6e62-4096-a910-74f0da06903d.jpg)
 
+    
+
 3. Creating install-mariadb.yml file and adding configuration
 
    ```markdown
    hosts: database
    vars:
      username: 'admin'
-     password: '12345'
+     password: 'admin'
      domain: 'lxc_mariadb.dev'
    roles:
       - db
@@ -357,8 +386,10 @@ ________________________________________________________________________________
    ```markdown
    ssh root@lxc_db_server.dev
    mysql -u admin -p
-   show databases; 
+   show databases;
    ```
+
+   
 
    ![Ansible SS1](https://user-images.githubusercontent.com/93067781/151578294-ea382d28-0c93-4290-ae03-3958105d413a.jpg)
 
@@ -371,11 +402,9 @@ ________________________________________________________________________________
    vars:
      git_url: 'https://github.com/aldonesia/sas-ci'
      destdir: '/var/www/html/ci'
-     domain: 
-        'lxc_php5_1.dev'
-        'lxc_php5_2.dev'
+     domain: 'lxc_php5_1.dev' #lxc_php5_2.dev
    roles:
-        app
+      - app
    ```
 
    - Creating directory roles/app, and creating tasks, handlers, templates in db directory
@@ -498,8 +527,8 @@ ________________________________________________________________________________
    ```markdown
    server {
      listen 80;
-     server_name {{servername}};
-     root {{ destdir }};
+     server_name {{ domain }};
+     root /var/www/html/wp;
      index index.php;
      location / {
         try_files $uri $uri/ /index.php?$query_string;
@@ -513,17 +542,23 @@ ________________________________________________________________________________
    }
    ```
 
+   - Running command
+
+   ```markdown
+   ansible-playbook -i hosts install-ci.yml -k
+   ```
+
    
 
 5. Creating install-wp.yml file and adding configuration
 
    ```markdown
    ---
-   - hosts: ubuntu_php7
+   - hosts: wordpress
      vars:
        username: 'admin'
-       password: 'SysAdminSas0102' #DON'T FORGET TO CHANGE
-       domain: 'lxc_php7.dev'
+       password: 'admin' #DON'T FORGET TO CHANGE
+       domain: 'wordpress.dev' #wordpress_1.dev wordpress_2.dev wordpress_3.dev
      roles:
        - wp
    ```
@@ -692,9 +727,6 @@ ________________________________________________________________________________
     * @package WordPress
     */
    
-   define('WP_HOME', 'http://kelompok7.fpas/news');
-   define('WP_SITEURL', 'http://kelompok7.fpas/news');
-   
    // * MySQL settings - You can get this info from your web host * //
    /** The name of the database for WordPress */
    define( 'DB_NAME', 'news' );
@@ -703,7 +735,7 @@ ________________________________________________________________________________
    define( 'DB_USER', 'admin' );
    
    /** MySQL database password */
-   define( 'DB_PASSWORD', '12345' );
+   define( 'DB_PASSWORD', 'admin' );
    
    /** MySQL hostname */
    define( 'DB_HOST', '10.0.3.200:3306' );
@@ -787,7 +819,7 @@ ________________________________________________________________________________
         index index.php index.html index.htm;
         
         # Your Domain Name
-        server_name lxc_php7_4.dev;
+        server_name {{ domain }};
    
         location / {
                 try_files $uri $uri/ /index.php?$query_string;
@@ -904,20 +936,35 @@ ________________________________________________________________________________
    nameserver 192.168.43.185
    ```
 
+   - Running command
+
+   ```markdown
+   ansible-playbook -i hosts install-wp.yml -k
+   ```
+
    
 
 6. Creating install-laravel.yml file and adding configuration
 
    ```markdown
    ---
-   - hosts: ubuntu_landing
+   - hosts: laravel
      vars:
        username: 'admin'
-       password: 'SysAdminSas0102'
-       domain: 'lxc_landing.dev'
+       password: 'admin'
+       domain: 'laravel.dev' #laravel_1.dev laravel_2.dev laravel_3.dev
      roles:
        - php
        - lv
+   ```
+
+   - Creating directory roles/lv, and creating tasks, handlers, templates in db directory
+
+   ```markdown
+   mkdir -p roles/lv
+   mkdir -p roles/lv/handlers 
+   mkdir -p roles/lv/tasks
+   mkdir -p roles/lv/templates
    ```
 
    - Creating main.yml, env.template, lv.conf, www.conf adding script configuration
@@ -1035,7 +1082,7 @@ ________________________________________________________________________________
    DB_PORT=3306
    DB_DATABASE=landing
    DB_USERNAME=admin
-   DB_PASSWORD=SysAdminSas0102
+   DB_PASSWORD=admin
    
    BROADCAST_DRIVER=log
    CACHE_DRIVER=file
@@ -1467,18 +1514,199 @@ ________________________________________________________________________________
    ;php_admin_value[memory_limit] = 32M
    ```
 
+   - Running command
+
+   ```markdown
+   ansible-playbook -i hosts install-laravel.yml -k
+   ```
+
+7. Creating install-yii.yml file and adding configuration
+
+   ```markdown
+   ---
+   - hosts: yii
+     vars:
+       username: 'admin'
+       password: 'admin'
+       domain: 'yii.dev' #yii_1.dev yii_2.dev yii_3.dev yii_4.dev
+     roles:
+       - yii
+   ```
+
+   - Creating directory roles/yii, and creating tasks, handlers, templates in db directory
+
+   ```markdown
+   mkdir -p roles/yii
+   mkdir -p roles/yii/handlers 
+   mkdir -p roles/yii/tasks
+   mkdir -p roles/yii/templates
+   ```
+
+   - Creating main.yml in roles/yii/handlers and adding script configuration
+     - nano roles/yii/handlers/main.yml
+
+   ```markdown
+   ---
+   - name: restart php
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=php7.4-fpm state=restarted
    
+   - name: restart nginx
+     become: yes
+     become_user: root
+     become_method: su
+     action: service name=nginx state=restarted
+   ```
+
+   - Creating main.yml in roles/yii/tasks and adding script configuration
+     - nano roles/yii/tasks/main.yml
+
+   ```markdown
+   ---
+   - name: delete apt chache
+     become: yes
+     become_user: root
+     become_method: su
+     command: rm -vf /var/lib/apt/lists/*
+   
+   - name: Download and install Composer
+     shell: curl -sS https://getcomposer.org/installer | php
+     args:
+       chdir: /usr/src/
+       creates: /usr/local/bin/composer
+       warn: false
+     become: yes
+   
+   - name: Add Composer to global path
+     copy:
+       dest: /usr/local/bin/composer
+       group: root
+       mode: '0755'
+       owner: root
+       src: /usr/src/composer.phar
+       remote_src: yes
+     become: yes
+   
+   - name: Ansible delete file create-project
+     file:
+       path: /var/www/html/basic
+       state: absent
+   
+   - name: composer create-project
+     shell: /usr/local/bin/composer create-project --prefer-dist yiisoft/yii2-app-basic /var/www/html/basic --prefer-dist --no-interaction
+   
+   - name: chmod
+     become: yes
+     become_user: root
+     become_method: su
+     command: chmod +x /usr/local/bin/composer
+   
+   - name: composer
+     shell: cd /var/www/html/basic; /usr/local/bin/composer install  --no-interaction
+   
+   - name: Copy .env.template
+     template:
+       src=templates/env.template
+       dest=/var/www/html/basic/config/db.php
+   
+   - name: Copy yii.conf
+     template:
+       src=templates/yii.conf
+       dest=/etc/nginx/sites-available/{{ domain }}
+     vars:
+       servername: '{{ domain }}'
+   
+   - name: Symlink yii.conf
+     command: ln -sfn /etc/nginx/sites-available/{{ domain }} /etc/nginx/sites-enabled/{{ domain }}
+     notify:
+       - restart nginx
+   
+   - name: Write {{ domain }} to /etc/hosts
+     lineinfile:
+       dest: /etc/hosts
+       regexp: '.*{{ domain }}$'
+       line: "127.0.0.1 {{ domain }}"
+       state: present
+   ```
+
+   - Creating env.template in roles/yii/templates and adding script configuration
+     - nano roles/yii/templates/env.template
+
+   ```markdown
+   <?php
+   
+   return [
+       'class' => 'yii\db\Connection',
+       'dsn' => 'mysql:host=10.0.3.200:3306;dbname=yii',
+       'username' => 'admin',
+       'password' => '12345',
+       'charset' => 'utf8',
+   ];
+   ```
+
+   - Creating yii.conf in roles/yii/templates/yii.conf and adding script configuration
+     - nano roles/yii/templates/yii.conf/yii.conf
+
+   ```markdown
+   server {
+        listen 80;
+        listen [::]:80;
+   
+        # Log files for Debugging
+        access_log /var/log/nginx/yii-access.log;
+        error_log /var/log/nginx/yii-error.log;
+   
+        # Webroot Directory for Laravel project
+        root /var/www/html/basic/web;
+        index index.php index.html index.htm;
+   
+        # Your Domain Name
+        server_name {{ domain }};
+   
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+   
+        # PHP-FPM Configuration Nginx
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass 127.0.0.1:9001;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
+        }
+   }
+   ```
+
+   - Running command
+
+   ```markdown
+   ansible-playbook -i hosts install-yii.yml -k
+   ```
 
 
 
 ### ***Hasil Screenshoot***
 
+**Laravel** (kelompok7.fpas/)
+
 ![Laravel SS1](https://user-images.githubusercontent.com/93067781/151578224-ca92d3a2-544d-40cf-9369-5b5e381b8753.jpg)
 
 
 
+**Wordpress** (news.kelompok7.fpas/)
 
+![wordpress1](https://user-images.githubusercontent.com/93067781/151665267-7a89a147-49e6-4301-8f3f-dd0024ea3a1a.jpg)
+
+
+
+**Codelgniter** (kelompok7.fpas/app)
 
 ![Codelnigter SS1](https://user-images.githubusercontent.com/93067781/151578275-839a2a4c-db49-41e6-a946-2a7c1ce28fca.jpg)
+
+**YII** (kelompok7.fpas/product)
 
 ![YII SS1](https://user-images.githubusercontent.com/93067781/151578288-0856a03e-c9fa-4fd7-b3cb-f2746d75bbe4.jpg)
