@@ -106,12 +106,6 @@ ________________________________________________________________________________
     exit
     ```
 
-    - Enrolling lxc_db_server ssh, lxc_php5_1, lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6 domain and ip to Ubuntu Server Host (/etc/hosts)
-
-    ```markdown
-    sudo nano /etc/hosts
-    ```
-
     - Entering directory
 
     ```markdown
@@ -1686,6 +1680,10 @@ ________________________________________________________________________________
    ```markdown
    ansible-playbook -i hosts install-yii.yml -k
    ```
+
+   - If we have installed yii, wordpress, laravel, codelgniter which requirements needed in each containers enroll IP Address ubuntu server at /etc/hosts computer local host
+
+     ![9a15c9fd-bebc-409f-8c46-f6e648261b38](https://user-images.githubusercontent.com/93067781/151665919-3cc6e67b-a243-4548-9d3f-fba3361eac25.jpg)
 
 
 
