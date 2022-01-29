@@ -902,9 +902,22 @@ ________________________________________________________________________________
 
    
 
-5. Creating main.yml, env.template, lv.conf, www.conf adding script configuration
+5. Creating instal-laravel.yml file and adding configuration
 
-   - nano roles/lv/handlers/main.yml
+   ```markdown
+   ---
+   - hosts: ubuntu_landing
+     vars:
+       username: 'admin'
+       password: 'SysAdminSas0102'
+       domain: 'lxc_landing.dev'
+     roles:
+       - php
+       - lv
+   ```
+
+   - Creating main.yml, env.template, lv.conf, www.conf adding script configuration
+     - nano roles/lv/handlers/main.yml
 
    ```markdown
    ---
@@ -921,7 +934,8 @@ ________________________________________________________________________________
      action: service name=nginx state=restarted
    ```
 
-   - nano roles/lv/tasks/main.yml
+   - Creating main.yml adding script configuration
+     - nano roles/lv/tasks/main.yml
 
    ```markdown
    ---
