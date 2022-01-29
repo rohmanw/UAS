@@ -102,8 +102,10 @@ ________________________________________________________________________________
    vars:
      username: 'admin'
      password: '12345'
+     domain: 'lxc_mariadb.dev'
    roles:
-     { role: db }
+      - db
+      - pma
    ```
 
    - Creating directory roles/db, and creating tasks, handlers, templates in db directory
