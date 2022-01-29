@@ -18,7 +18,7 @@ ________________________________________________________________________________
    mkdir -p ~/ansible/tubes
    ```
 
- 2. Creating lxc_db_server, lxc_php5_1, lxc_php5_2, install mariadb, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6
+ 2. Creating lxc_db_server, lxc_php5_1, lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6
 
     - Creating lxc container, start and entering container
 
@@ -44,7 +44,7 @@ ________________________________________________________________________________
     apt update; apt upgrade -y; apt install -y nano
     ```
     
-    - Configuration lxc_db_server, lxc_php5_1, lxc_php5_2, install mariadb, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6 like this commands below
+    - Configuration lxc_db_server, lxc_php5_1, lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6 like this commands below
     - Install ssh server
     
     ```markdown
@@ -73,7 +73,7 @@ ________________________________________________________________________________
     passwd (ex: 1)
     ```
     
-    - Log out from lxc_db_server, lxc_php5_1, and lxc_php5_2
+    - Log out from lxc_db_server, lxc_php5_1, and lxc_php5_2, lxc_php7_1, lxc_php7_2, lxc_php7_3,  lxc_php7_4, lxc_php7_5 and lxc_php7_6
     
     ```markdown
     exit
