@@ -93,18 +93,7 @@ ________________________________________________________________________________
 
     - Creating hosts and adding script
 
-    ```markdown
-    [database]
-    lxc_db_server ansible_host=lxc_mariadb.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php5_1 ansible_host=lxc_php5_1.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php5_2 ansible_host=lxc_php5_2.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_1 ansible_host=lxc_php7_1.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_2 ansible_host=lxc_php7_2.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_3 ansible_host=lxc_php7_3.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_4 ansible_host=lxc_php7_4.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_5 ansible_host=lxc_php7_4.dev ansible_ssh_user=root ansible_become_pass=1
-    lxc_php7_6 ansible_host=lxc_php7_6.dev ansible_ssh_user=root ansible_become_pass=1
-    ```
+    ![ba94bcf4-2e69-43e7-b14a-dbdb91ef7a87](https://user-images.githubusercontent.com/93067781/151647679-806dcaeb-6e62-4096-a910-74f0da06903d.jpg)
 
 3. Creating install-mariadb.yml file and adding configuration
 
