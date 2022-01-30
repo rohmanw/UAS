@@ -360,7 +360,7 @@ ________________________________________________________________________________
    ```
 
    - Creating main.yml in roles/db/handlers and adding script configuration
-     - roles roles/db/handlers/main.yml
+     - nano roles/db/handlers/main.yml
 
    ```markdown
    ---
