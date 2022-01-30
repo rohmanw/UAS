@@ -26,12 +26,12 @@ ________________________________________________________________________________
     lxc-create -n lxc_db_server -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
     lxc-create -n lxc_php5_1 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
     lxc-create -n lxc_php5_2 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_1 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_2 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_3 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_4 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_5 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
-    lxc-create -n lxc_php7_6 -t download -- --dist debian --release buster --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_1 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_2 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_3 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_4 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_5 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
+    lxc-create -n lxc_php7_6 -t download -- --dist ubuntu --release focal --arch amd64 --force-cache --no-validate --server images.linuxcontainers.org
     lxc-start -n lxc_db_server
     lxc-start -n lxc_php5_1 
     lxc_start -n lxc_php5_2
@@ -1635,7 +1635,7 @@ ________________________________________________________________________________
        'class' => 'yii\db\Connection',
        'dsn' => 'mysql:host=10.0.3.200:3306;dbname=yii',
        'username' => 'admin',
-       'password' => '12345',
+       'password' => 'admin',
        'charset' => 'utf8',
    ];
    ```
@@ -1681,8 +1681,14 @@ ________________________________________________________________________________
    ansible-playbook -i hosts install-yii.yml -k
    ```
 
-   - If we have installed yii, wordpress, laravel, codelgniter which requirements needed in each containers enroll IP Address ubuntu server at /etc/hosts computer local host
+   - Setting proxy pass at vm ubuntu server
 
+   ```markdown
+   /etc/nginx/sites-available
+   ```
+   
+   - If we have installed yii, wordpress, laravel, codelgniter which requirements needed in each containers enroll IP Address ubuntu server at /etc/hosts computer local host
+   
      ![9a15c9fd-bebc-409f-8c46-f6e648261b38](https://user-images.githubusercontent.com/93067781/151665919-3cc6e67b-a243-4548-9d3f-fba3361eac25.jpg)
 
 
@@ -1708,3 +1714,17 @@ ________________________________________________________________________________
 **YII** (kelompok7.fpas/product)
 
 ![YII SS1](https://user-images.githubusercontent.com/93067781/151578288-0856a03e-c9fa-4fd7-b3cb-f2746d75bbe4.jpg)
+
+- [x] Setting load balancer vm hosts ubuntu nano server 
+
+  ```markdown
+  nano server /etc/nginx/sites-available/kelompok7.fpas
+  ln -s /etc/nginx/sites-available/kelompok7.fpas /etc/nginx/sites-enabled/
+  ```
+
+  ![WhatsApp Image 2022-01-30 at 14 10 03](https://user-images.githubusercontent.com/93067781/151691513-1fa82f64-ca6a-4f04-9850-c05433713924.jpeg)
+
+  ![aa59a3faf8-3a59-4afc-9f03-baab37fe8844](https://user-images.githubusercontent.com/93067781/151691395-27e78a6c-d4fb-423f-9739-f4e7049d121e.jpg)
+
+  ![aa514c346c-0a31-4f71-8e83-eac11a6441a7](https://user-images.githubusercontent.com/93067781/151691400-5f695514-a865-4108-bc36-36d3c05195f3.jpg)
+
