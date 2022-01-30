@@ -48,7 +48,7 @@ ________________________________________________________________________________
 
     ```markdown
     echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_db_server/config
-    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php5_1r/config
+    echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php5_1/config
     echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php5_2/config
     echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_1/config
     echo "lxc.start.auto = 1" >> /var/lib/lxc/lxc_php7_2/config
