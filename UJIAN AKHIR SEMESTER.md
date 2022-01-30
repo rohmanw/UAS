@@ -1728,3 +1728,75 @@ ________________________________________________________________________________
 
   ![aa514c346c-0a31-4f71-8e83-eac11a6441a7](https://user-images.githubusercontent.com/93067781/151691400-5f695514-a865-4108-bc36-36d3c05195f3.jpg)
 
+
+
+
+
+### ***Soal Analisa***
+
+1. Berapa nilai rata - rata througput untuk setiap website yang dihasilkan dari load testing?
+2. Berapa nilai rata - rata jumlah user yang dapat dilayani setiap detik untuk setiap website yang dihasilkan dari load testing?
+3. Bagaimana cara mengurangi nilai througput dan meningkatkan nilai jumlah user yang dapat dilayani setiap detik untuk skema yang telah dibuat ? Sebutkan faktor faktor yang mempengaruhi !
+
+#### ***Jawab***
+
+![WhatsApp Image 2022-01-30 at 16 43 45](https://user-images.githubusercontent.com/93067781/151696900-e57f5fa1-6571-4622-954c-0e27926d89cc.jpeg)![WhatsApp Image 2022-01-30 at 15 58 52](https://user-images.githubusercontent.com/93067781/151696901-be0cd762-abc7-4593-bc46-42f9c08bb44d.jpeg)![WhatsApp Image 2022-01-30 at 16 00 00](https://user-images.githubusercontent.com/93067781/151696905-c09df780-ad98-499c-980f-214e5e59e5cd.jpeg)![WhatsApp Image 2022-01-30 at 16 00 37](https://user-images.githubusercontent.com/93067781/151696907-bbcf6957-3307-4b0d-b2f6-07b02341cbd1.jpeg)
+
+1. Rata-rata throughput
+   - 50 user
+        - news.kelompok7.fpas : 207.5/s
+        - kelompok7.fpas/ : 212.8/s
+        - kelompok7.fpas/app : 208.3/s
+        - kelompok7.fpas/product : 210.1/s
+   - 150 user
+        - news.kelompok7.fpas : 152/s
+        - kelompok7.fpas/ : 176.3/s
+        - kelompok7.fpas/app :  149/s
+        - kelompok7.fpas/product : 165.3/s
+   - 300 user
+     * news.kelompok7.fpas :  164/s
+     * kelompok7.fpas/ : 171.3/s
+     * kelompok7.fpas/app : 168/s
+     * kelompok7.fpas/product : 170/s
+   - 500 user
+        * news.kelompok7.fpas : 160.6/s
+        * kelompok7.fpas/ : 160.7/s
+        * kelompok7.fpas/app : 160.6/s
+        * kelompok7.fpas/product : 170/s
+
+2. Rata - rata jumlah user yang dapat dilayani setiap detik
+
+   - 50 user
+     - news.kelompok7.fpas : 17
+     - kelompok7.fpas/ : 16
+     - kelompok7.fpas/app : 6
+     - kelompok7.fpas/product : 6
+   - 150 user
+     - news.kelompok7.fpas : 70
+     - kelompok7.fpas/ : 82
+     - kelompok7.fpas/app :  13
+     - kelompok7.fpas/product : 13
+   - 300 user
+     * news.kelompok7.fpas :  51
+     * kelompok7.fpas/ : 48
+     * kelompok7.fpas/app : 19
+     * kelompok7.fpas/product : 15
+
+   - 500 user
+     * news.kelompok7.fpas : 28
+     * kelompok7.fpas/ : 134
+     * kelompok7.fpas/app : 7
+     * kelompok7.fpas/product : 6
+
+3. Untuk meningkatkan jumlah user pada layanan web server dapat dilakukan dengan beberapa hal yaitu :
+    - server
+      1. meningkatkan atau mengupdate hardware dengan peforma tinggi
+      2. menambah container baru pada load balancer
+      3. mengupdate sistem operasi yang terbaru secara berkala
+      4. Menghapus layanan yang tidak perlu
+      5. optimasi database
+      6. meningkatkan kualitas atau kecepatan jaringan internet
+     - website
+          1. menghapus plugin yang tidak perlu
+          1. optimasi gambar
+          1. menggunakan plugin caching
